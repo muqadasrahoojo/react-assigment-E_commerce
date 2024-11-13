@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box, Card, CircularProgress, Divider, Grid, Snackbar, SnackbarContent, TextField, Tooltip, Typography,
 }
   from "@mui/material";
@@ -11,15 +12,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
+
 const Products = () => {
   const [cartList, setCartList] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
   const [products, setProducts] = useState([]);
   const [isloading, setIsloading] = useState(false);
-
+  const [categoriesOpations, setcategoriesOpations] = useState([]);
+  const [categoryFilter, setcategoryFilter] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const navigate = useNavigate();
 
-  
+
 
   console.log(isloading, "setIsloading");
 
@@ -50,6 +55,9 @@ const Products = () => {
     setProducts(filteredArr);
   };
 
+
+
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -60,6 +68,26 @@ const Products = () => {
         if (products.status === 200) {
           setIsloading(false);
           setProducts(products?.data);
+          setAllProducts(products?.data);
+
+
+          const filterCategories = products?.data?.map((product) => {
+            return {
+
+              label: product?.category?.toUpperCase(),
+              value: product?.category,
+            };
+          });
+
+          const uniqueCategories = filterCategories.filter(
+            (item, index, self) => index === self.findIndex((t) => t.value === item.value)
+          );
+
+          setcategoriesOpations(uniqueCategories);
+
+
+
+
         } else {
           setIsloading(true);
         }
@@ -70,16 +98,43 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+
+  useEffect(() => {
+    let filteredProduct = allProducts?.filter(
+      (product) => product?.category === categoryFilter?.value);
+
+      setProducts(filteredProduct);
+      console.log(filteredProduct, 'filteredProduct');
+      
+
+
+  }, [categoryFilter])
+
   return (
     <>
-      <Box className="container mt-3">
+      <Box className="container mt-3 d-flex justify-content-between">
         <TextField
           onChange={searchHandler}
           size="small"
           placeholder="Search items..."
         />
+        <Autocomplete
+          size='small'
+          disablePortal
+          onChange={(e, newValue) => {
+            setcategoryFilter(newValue);
+          }}
+          options={categoriesOpations}
+          sx={{ width: 260 }}
+          renderInput={(params) => <TextField {...params} label="Categories" />}
+        />
       </Box>
+
+
+
+
       <Snackbar
+
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={openAlert}
         autoHideDuration={6000}
@@ -128,17 +183,18 @@ const Products = () => {
                     <Divider sx={{ borderColor: "#333" }} variant="fullwidth" />
                     <Box className="d-flex justify-content-between mt-2">
                       <Tooltip title="Product Details">
-                        <VisibilityIcon sx={{color: "#26305b"}} onClick={()=> {navigate(`/product-details/${product?.id}`);
+                        <VisibilityIcon sx={{ color: "#26305b" }} onClick={() => {
+                          navigate(`/product-details/${product?.id}`);
                           // console.log(product);
-                          
+
                         }} />
                       </Tooltip>
                       <Tooltip title="Add to favorite">
-                        <FavoriteBorderIcon sx={{color: "#9B7BE9"}} />
+                        <FavoriteBorderIcon sx={{ color: "#9B7BE9" }} />
                       </Tooltip>
 
                       <Tooltip title="Add to cart">
-                        <AddShoppingCartIcon sx={{color: "#26305b"}} onClick={() => cartHandler(product)} />
+                        <AddShoppingCartIcon sx={{ color: "#26305b" }} onClick={() => cartHandler(product)} />
                       </Tooltip>
 
                     </Box>

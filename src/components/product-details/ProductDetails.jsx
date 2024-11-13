@@ -6,6 +6,9 @@ import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import ShareIcon from '@mui/icons-material/Share';
 
 
 const ProductDetails = () => {
@@ -70,14 +73,37 @@ const ProductDetails = () => {
               ({productDetail?.rating?.count} reviews)
             </span>
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, fontWeight: 'bold', backgroundColor: '#26305b' }}
 
-          >
-            Add to Cart
-          </Button>
+          < Box className="d-flex gap-2">
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, fontWeight: 'bold', backgroundColor: '#26305b' }}
+
+            >
+              < FavoriteBorderIcon />
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, fontWeight: 'bold', backgroundColor: '#26305b' }}
+
+            >
+              < AddShoppingCartIcon />
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, fontWeight: 'bold', backgroundColor: '#26305b' }}
+
+            >
+              < ShareIcon />
+            </Button>
+
+          </Box>
+
 
         </Grid>
       </Grid>}
