@@ -18,6 +18,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CartList from '../cart-list/Cartlist';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 
@@ -61,12 +62,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function Header () {
+export default function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
     const [cartItems, setCartItems] = useState([])
+    const count = useSelector((state) => state.counter)
 
-    console.log(cartItems, 'cartItems');
+    console.log(count, 'count');
+
+
+    // console.log(cartItems, 'cartItems');
 
 
     const [open, setOpen] = useState(false);
@@ -138,7 +143,7 @@ export default function Header () {
         >
             <MenuItem>
                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={1} color="error">
+                    <Badge badgeContent={count?.value} color="error">
                         < ShoppingCartIcon onClick={toggleDrawer(true)} />
                     </Badge>
                 </IconButton>
@@ -170,19 +175,19 @@ export default function Header () {
             </MenuItem>
         </Menu>
     );
-    useEffect(() => {
-        const cartItemsArr = localStorage.getItem("cartList");
-        const parseCartItemsArr = JSON.parse(cartItemsArr)
+    // useEffect(() => {
+    //     const cartItemsArr = localStorage.getItem("cartList");
+    //     const parseCartItemsArr = JSON.parse(cartItemsArr)
 
 
-        setCartItems(parseCartItemsArr);
+    //     setCartItems(parseCartItemsArr);
 
-    }, [])
+    // }, [])
 
 
     return (
         <Box sx={{ flexGrow: 1, }}>
-            <AppBar position="static" sx={{backgroundColor:"#26305b"}}>
+            <AppBar position="static" sx={{ backgroundColor: "#26305b" }}>
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -199,13 +204,13 @@ export default function Header () {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
                     >
-                      ShopSphere
+                        ShopSphere
                     </Typography>
-              
+
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={1} color="error">
+                            <Badge badgeContent={count?.value} color="error">
                                 < ShoppingCartIcon onClick={toggleDrawer(true)} />
                             </Badge>
                         </IconButton>
