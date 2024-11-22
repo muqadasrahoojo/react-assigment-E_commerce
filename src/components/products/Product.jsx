@@ -11,9 +11,10 @@ import "./product.css";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../slices/add-cart/addCartSlice";
-
+import { addProduct } from "../../slices/products/ProductsSlice";
+import { ToastContainer, toast } from 'react-toastify';
 
 const Products = () => {
   const [cartList, setCartList] = useState([]);
@@ -29,6 +30,13 @@ const Products = () => {
 
 
   console.log(isloading, "setIsloading");
+
+  const { isToast } = useSelector((state) => state.products);
+
+  console.log(isToast, "toast");
+
+
+  // const notify = () => toast("Wow so easy!");
 
   const cartHandler = (product) => {
     const isExist = cartList.find((cart) => cart.id === product.id);
@@ -61,6 +69,7 @@ const Products = () => {
 
 
   useEffect(() => {
+
     const fetchProducts = async () => {
       try {
         setIsloading(true)
@@ -112,9 +121,20 @@ const Products = () => {
 
   }, [categoryFilter])
 
+  useEffect(() => {
+    if (isToast) {
+      toast("Product already exit!")
+
+    }
+
+  }, [isToast])
+
   return (
     <>
+      <ToastContainer />
+
       <Box className="container mt-3 d-flex justify-content-between">
+
         <TextField
           onChange={searchHandler}
           size="small"
@@ -196,7 +216,7 @@ const Products = () => {
                       </Tooltip>
 
                       <Tooltip title="Add to cart">
-                        <AddShoppingCartIcon sx={{ color: "#26305b" }} onClick={() => dispatch(addToCart())} />
+                        <AddShoppingCartIcon sx={{ color: "#26305b" }} onClick={() => dispatch(addProduct(product))} />
                       </Tooltip>
 
 
